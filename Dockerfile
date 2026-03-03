@@ -16,4 +16,4 @@ EXPOSE 9090
 
 # Comando de inicio usando CPU y un modelo ligero
 # Render inyecta la variable $PORT automáticamente
-CMD python run_server.py --port $PORT --backend faster_whisper
+CMD python run_server.py --port 9090 --backend faster_whisper
