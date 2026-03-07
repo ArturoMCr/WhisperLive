@@ -202,6 +202,12 @@ class ServeClientFasterWhisper(ServeClientBase):
             depends on the implementation of the `transcriber.transcribe` method but typically
             includes the transcribed text.
         """
+        # --- Inicio Calculo RTF ---
+        import time
+        audio_duration = len(input_sample) / 16000.0
+        start_time = time.time()
+        #---------------------------
+        
         if ServeClientFasterWhisper.SINGLE_MODEL:
             ServeClientFasterWhisper.SINGLE_MODEL_LOCK.acquire()
         result, info = self.transcriber.transcribe(
@@ -213,7 +219,13 @@ class ServeClientFasterWhisper(ServeClientBase):
             vad_parameters=self.vad_parameters if self.use_vad else None)
         if ServeClientFasterWhisper.SINGLE_MODEL:
             ServeClientFasterWhisper.SINGLE_MODEL_LOCK.release()
-
+        
+        # --- Fin Calculo RTF  ---
+        process_time = time.time() - start_time
+        rtf = process_time / audio_duration if audio_duration > 0 else 0.0
+        print(f" [WHISPER CHUNK] Audio : {audio_duration:.3f}s | Proceso: {process_time:.3f}s | RTF: {rtf:.3f}x")
+        # ------------------------
+        
         if self.language is None and info is not None:
             self.set_language(info)
         return result
