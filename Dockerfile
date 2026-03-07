@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Copiar archivos del proyecto
-COPY . .
+COPY . /app
 
 # Instalar dependencias de Python (Servidor)
 RUN pip install --no-cache-dir -r requirements/server.txt
@@ -16,4 +16,4 @@ EXPOSE 9090
 
 # Comando de inicio usando CPU y un modelo ligero
 # Render inyecta la variable $PORT automáticamente
-CMD python run_server.py --port 9090 --backend faster_whisper
+CMD ["python", "run_server.py", "--port", "9090", "--backend", "faster_whisper"]
